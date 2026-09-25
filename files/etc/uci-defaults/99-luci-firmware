@@ -1,0 +1,23 @@
+#!/bin/sh
+
+mount -o remount,rw /
+
+# Patch Firmware Version (hapus luciversion saja)
+sed -i "s#_('Firmware Version'),(L.isObject(boardinfo.release)?boardinfo.release.description+' / ':'')+(luciversion||'')#_('Firmware Version'),(L.isObject(boardinfo.release)?boardinfo.release.description+'':'')#" \
+/www/luci-static/resources/view/status/include/10_system.js
+
+# Patch OPENWRT_RELEASE
+sed -i "s|^OPENWRT_RELEASE=.*|OPENWRT_RELEASE=\"OpenWrt __VERSION__ by Yogxx\"|" /usr/lib/os-release
+
+# Hapus header Status
+sed -i "/<h2 name=\"content\">{{ _('Status') }}<\/h2>/d" \
+/usr/share/ucode/luci/template/admin_status/index.ut
+
+# Clear LuCI cache dulu
+rm -f /tmp/luci-indexcache
+
+# Restart web server
+/etc/init.d/odhcpd restart
+/etc/init.d/uhttpd restart
+
+exit 0
