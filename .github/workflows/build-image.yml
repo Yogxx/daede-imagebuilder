@@ -40,7 +40,7 @@ on:
         required: true
         default: "latest"
       daede_apk_url:
-        description: Optional: Directly specify the APK download URL for luci-app-daede.
+        description: "Optional: Directly specify the APK download URL for luci-app-daede"
         required: false
         default: ""
 
