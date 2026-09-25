@@ -12,9 +12,9 @@ on:
           - "true"
           - "false"
       imagebuilder_url:
-        description: OpenWrt ImageBuilder Download Link
+        description: ImmortalWrt ImageBuilder Download Link
         required: true
-        default: "https://downloads.openwrt.org/releases/25.12.4/targets/bcm27xx/bcm2711/openwrt-imagebuilder-25.12.4-bcm27xx-bcm2711.Linux-x86_64.tar.zst"
+        default: "https://downloads.immortalwrt.org/releases/25.12.2/targets/bcm27xx/bcm2711/immortalwrt-imagebuilder-25.12.2-bcm27xx-bcm2711.Linux-x86_64.tar.zst"
       preflight:
         description: Check that the package list is complete before building.
         required: true
@@ -97,7 +97,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          name: OpenWrt-daede-raspi4
+          name: ImmortalWrt-daede-raspi4
           path: out/*
           if-no-files-found: error
 
