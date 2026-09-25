@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="${VERSION:-25.12-SNAPSHOT}"
-TARGET="${TARGET:-x86/64}"
-PROFILE="${PROFILE:-generic}"
-IMAGEBUILDER_URL="${IMAGEBUILDER_URL:-https://downloads.immortalwrt.org/releases/25.12-SNAPSHOT/targets/x86/64/immortalwrt-imagebuilder-25.12-SNAPSHOT-x86-64.Linux-x86_64.tar.zst}"
+VERSION="${VERSION:-25.12.4}"
+TARGET="${TARGET:-bcm27xx/bcm2711}"
+PROFILE="${PROFILE:-rpi-4}"
+IMAGEBUILDER_URL="${IMAGEBUILDER_URL:-https://downloads.openwrt.org/releases/25.12.4/targets/bcm27xx/bcm2711/openwrt-imagebuilder-25.12.4-bcm27xx-bcm2711.Linux-x86_64.tar.zst}"
 EXTRA_IMAGE_NAME="${EXTRA_IMAGE_NAME:-daede}"
 OUT_DIR="${OUT_DIR:-$PWD/out}"
 PREFLIGHT="${PREFLIGHT:-1}"
@@ -12,7 +12,7 @@ ROOTFS_PARTSIZE="${ROOTFS_PARTSIZE:-1024}"
 INSTALL_DAEDE="${INSTALL_DAEDE:-1}"
 DAEDE_REPO="${DAEDE_REPO:-kenzok8/openwrt-daede}"
 DAEDE_RELEASE_TAG="${DAEDE_RELEASE_TAG:-latest}"
-DAEDE_ARCH="${DAEDE_ARCH:-x86_64}"
+DAEDE_ARCH="${DAEDE_ARCH:-aarch64_cortex-a72}"
 DAEDE_APK_URL="${DAEDE_APK_URL:-}"
 
 EXTRA_PACKAGES="${EXTRA_PACKAGES:-luci luci-i18n-base-zh-cn luci-i18n-package-manager-zh-cn luci-app-daede kmod-sched-core kmod-sched-bpf kmod-veth kmod-xdp-sockets-diag curl nano}"
@@ -128,7 +128,7 @@ diagnose_failure() {
 ImageBuilder failed.
 
 Common causes for this daede image:
-- The selected ImmortalWrt snapshot ImageBuilder and package feeds are out of sync.
+- The selected OpenWrt ImageBuilder and package feeds are out of sync.
   Example: base packages require a newer libubox/libblobmsg-json than the public feed provides.
 - luci-app-daede or one of the dae/daed eBPF dependencies
   (kmod-sched-bpf / kmod-veth / kmod-xdp-sockets-diag)
@@ -137,7 +137,7 @@ Common causes for this daede image:
   directory, or its architecture does not match the selected target.
 
 About BTF (no longer a blocker on 25.12):
-- ImmortalWrt 25.12 kernels enable CONFIG_DEBUG_INFO_BTF by default. dae/daed reads BTF
+- OpenWrt 25.12 kernels enable CONFIG_DEBUG_INFO_BTF by default. dae/daed reads BTF
   directly from /sys/kernel/btf/vmlinux at runtime and does NOT require a separate
   vmlinux-btf package. Do not add vmlinux-btf to EXTRA_PACKAGES — it is not published
   in the feed and ImageBuilder cannot build it.
@@ -145,7 +145,7 @@ About BTF (no longer a blocker on 25.12):
   vmlinux-btf via a full SDK build first (ImageBuilder cannot compile packages).
 
 Next choices:
-- Retry later with the same 25.12-SNAPSHOT URL after ImmortalWrt feeds finish syncing.
+- Retry later with the same 25.12.4 URL after OpenWrt feeds finish syncing.
 - Use a release/rc ImageBuilder URL and rebuild daede/dae/daed APKs against that release/rc.
 - Override DAEDE_RELEASE_TAG, DAEDE_ARCH, or DAEDE_APK_URL if you need a specific
   luci-app-daede release asset.
@@ -197,11 +197,11 @@ fi
 	  sha256sum "$f"
 	done > sha256sums
 	# Build date in CST for release notes
-	BUILD_DATE="$(TZ='Asia/Shanghai' date '+%F %H:%M CST')"
+	BUILD_DATE="$(TZ='Asia/Jakarta' date '+%F %H:%M CST')"
 	cat > BUILD-MANIFEST.txt <<BODYEOF
 ## daede 固件 · ${EXTRA_IMAGE_NAME}
 
-基于 ImmortalWrt 25.12-SNAPSHOT，x86-64 通用镜像，squashfs-only。
+基于 OpenWrt 25.12.4，bcm27xx-bcm2711 通用镜像，squashfs-only。
 
 ### 推荐下载
 
