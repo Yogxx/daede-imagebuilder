@@ -164,7 +164,7 @@ fi
 
 # Slim image formats: keep only squashfs EFI img.gz + qcow2 + vmdk
 sed -i \
-  -e 's/^CONFIG_TARGET_ROOTFS_EXT4FS=y/# CONFIG_TARGET_ROOTFS_EXT4FS is not set/' \
+  -e 's/^CONFIG_TARGET_ROOTFS_SQUASHFS=y/# CONFIG_TARGET_ROOTFS_SQUASHFS is not set/' \
   -e 's/^CONFIG_TARGET_ROOTFS_TARGZ=y/# CONFIG_TARGET_ROOTFS_TARGZ is not set/' \
   -e 's/^CONFIG_VDI_IMAGES=y/# CONFIG_VDI_IMAGES is not set/' \
   -e 's/^CONFIG_VHDX_IMAGES=y/# CONFIG_VHDX_IMAGES is not set/' \
@@ -185,9 +185,9 @@ fi
 
 # Rename to short friendly names — the immortalwrt prefix is too long for GitHub UI
 	cd "$OUT_DIR"
-	for f in *-squashfs-combined-efi.img.gz;  do [ -f "$f" ] && mv "$f" daede-squashfs-efi.img.gz;  done
-	for f in *-squashfs-combined-efi.qcow2; do [ -f "$f" ] && mv "$f" daede-squashfs-efi.qcow2; done
-	for f in *-squashfs-combined-efi.vmdk;  do [ -f "$f" ] && mv "$f" daede-squashfs-efi.vmdk;  done
+	for f in *-ext4-combined-efi.img.gz;  do [ -f "$f" ] && mv "$f" daede-ext4-efi.img.gz;  done
+	for f in *-ext4-combined-efi.qcow2; do [ -f "$f" ] && mv "$f" daede-ext4-efi.qcow2; done
+	for f in *-ext4-combined-efi.vmdk;  do [ -f "$f" ] && mv "$f" daede-ext4-efi.vmdk;  done
 	for f in *-kernel.bin;                do [ -f "$f" ] && mv "$f" daede-kernel.bin;            done
 	for f in *-rootfs.tar.gz;             do [ -f "$f" ] && mv "$f" daede-rootfs.tar.gz;         done
 	for f in *.manifest;                  do [ -f "$f" ] && mv "$f" daede.manifest;              done
@@ -201,15 +201,15 @@ fi
 	cat > BUILD-MANIFEST.txt <<BODYEOF
 ## daede 固件 · ${EXTRA_IMAGE_NAME}
 
-基于 OpenWrt 25.12.4，bcm27xx-bcm2711 通用镜像，squashfs-only。
+基于 OpenWrt 25.12.2，bcm27xx-bcm2711 通用镜像，ext4-only。
 
 ### 推荐下载
 
 | 格式 | 适用场景 | 文件 |
 |------|----------|------|
-| **img.gz** | 物理机 dd 写盘 / PVE 导入 | daede-squashfs-efi.img.gz |
-| **qcow2** | QEMU / Proxmox VE | daede-squashfs-efi.qcow2 |
-| **vmdk** | VMware ESXi / Workstation | daede-squashfs-efi.vmdk |
+| **img.gz** | 物理机 dd 写盘 / PVE 导入 | daede-ext4-efi.img.gz |
+| **qcow2** | QEMU / Proxmox VE | daede-ext4-efi.qcow2 |
+| **vmdk** | VMware ESXi / Workstation | daede-ext4-efi.vmdk |
 
 > 额外：`daede-rootfs.tar.gz` 裸文件系统，可用于 LXC 容器转换。
 
