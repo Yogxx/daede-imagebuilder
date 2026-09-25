@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VERSION="${VERSION:-25.12.4}"
+VERSION="${VERSION:-25.12.2}"
 TARGET="${TARGET:-bcm27xx/bcm2711}"
 PROFILE="${PROFILE:-rpi-4}"
-IMAGEBUILDER_URL="${IMAGEBUILDER_URL:-https://downloads.openwrt.org/releases/25.12.4/targets/bcm27xx/bcm2711/openwrt-imagebuilder-25.12.4-bcm27xx-bcm2711.Linux-x86_64.tar.zst}"
+IMAGEBUILDER_URL="${IMAGEBUILDER_URL:-https://downloads.immortalwrt.org/releases/25.12.2/targets/bcm27xx/bcm2711/immortalwrt-imagebuilder-25.12.2-bcm27xx-bcm2711.Linux-x86_64.tar.zst}"
 EXTRA_IMAGE_NAME="${EXTRA_IMAGE_NAME:-daede}"
 OUT_DIR="${OUT_DIR:-$PWD/out}"
 PREFLIGHT="${PREFLIGHT:-1}"
@@ -145,7 +145,7 @@ About BTF (no longer a blocker on 25.12):
   vmlinux-btf via a full SDK build first (ImageBuilder cannot compile packages).
 
 Next choices:
-- Retry later with the same 25.12.4 URL after OpenWrt feeds finish syncing.
+- Retry later with the same 25.12.2 URL after OpenWrt feeds finish syncing.
 - Use a release/rc ImageBuilder URL and rebuild daede/dae/daed APKs against that release/rc.
 - Override DAEDE_RELEASE_TAG, DAEDE_ARCH, or DAEDE_APK_URL if you need a specific
   luci-app-daede release asset.
