@@ -1,27 +1,25 @@
 # imagebuilder
 
-[英文](#english)
-
 ## English
 
-Build an ImmortalWrt x86/64 KVM test image with
+Build an ImmortalWrt bcm27xx/bcm2711 KVM test image with
 [`luci-app-daede`](https://github.com/kenzok8/openwrt-daede) installed by
 default, plus the runtime dependencies needed by `dae` / `daed`.
 
 ### Default Image
 
-- Version: ImmortalWrt `25.12-SNAPSHOT`
-- Target: `x86/64`
-- Profile: `generic`
+- Version: ImmortalWrt `25.12.2`
+- Target: `bcm27xx/bcm2711`
+- Profile: `rpi-4`
 - Rootfs partition: `1024` MB
 - ImageBuilder URL:
-  `https://downloads.immortalwrt.org/releases/25.12-SNAPSHOT/targets/x86/64/immortalwrt-imagebuilder-25.12-SNAPSHOT-x86-64.Linux-x86_64.tar.zst`
+  `https://downloads.immortalwrt.org/releases/25.12.2/targets/bcm27xx/bcm2711/immortalwrt-imagebuilder-25.12.2-bcm27xx/bcm2711.Linux-x86_64.tar.zst`
 - Shortcut:
   [`kenzok8/openwrt-daede`](https://github.com/kenzok8/openwrt-daede)
 
 ### Default Packages
 
-The workflow downloads the matching `luci-app-daede-*-x86_64.apk` from the
+The workflow downloads the matching `luci-app-daede-*.apk` from the
 [`kenzok8/openwrt-daede`](https://github.com/kenzok8/openwrt-daede) GitHub
 Release, places it in ImageBuilder's local package directory, and installs these
 packages:
@@ -62,20 +60,6 @@ About BTF:
 - If you target an older OpenWrt release whose kernel lacks built-in BTF, build
   `vmlinux-btf` with a full SDK build first.
 
-### First Boot Defaults
-
-The generated image applies these defaults on first boot:
-
-- LAN IP: `192.168.3.252/24`
-- Gateway: `192.168.3.254`
-- DNS: `192.168.3.254`, `223.5.5.5`
-- SSH port: `9167`
-
-No root password is written into this repository or the generated image. The
-image keeps the OpenWrt default empty root password, so the first LuCI/console
-login should set a new password. For unattended access, inject an SSH public key
-using a private workflow/secret-based step.
-
 ### Build
 
 Run the `Build daede image` workflow manually from GitHub Actions.
@@ -87,8 +71,8 @@ Common inputs:
 
 - `publish_release`: publish the generated image to GitHub Releases, defaults to
   `false`
-- `imagebuilder_url`: ImmortalWrt ImageBuilder URL, defaults to `25.12-SNAPSHOT`
-  x86/64
+- `imagebuilder_url`: ImmortalWrt ImageBuilder URL, defaults to `25.12.2`
+  bcm27xx/bcm2711
 - `preflight`: run the package manifest check before building, defaults to
   `true`
 - `rootfs_partsize`: rootfs partition size, defaults to `1024` MB
@@ -102,6 +86,6 @@ The generated image will include `luci-app-daede`.
 You can override the daede APK source with environment variables:
 
 - `DAEDE_RELEASE_TAG`: defaults to `latest`
-- `DAEDE_ARCH`: defaults to `x86_64`
+- `DAEDE_ARCH`: defaults to `bcm27xx/bcm2711`
 - `DAEDE_APK_URL`: direct APK URL override
 - `INSTALL_DAEDE`: set to `0` to skip baking daede into the image
