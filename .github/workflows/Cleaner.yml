@@ -1,0 +1,45 @@
+name: Delete All Releases & Tags
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Ketik "yes" untuk konfirmasi hapus semua release dan tag'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  delete-releases:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check confirmation
+        if: ${{ github.event.inputs.confirm != 'yes' }}
+        run: |
+          echo "Konfirmasi tidak sesuai, batal."
+          exit 1
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Delete all releases and their tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          repo="${{ github.repository }}"
+          for id in $(gh release list --repo "$repo" --limit 1000 --json tagName -q '.[].tagName'); do
+            echo "Menghapus release: $id"
+            gh release delete "$id" --repo "$repo" --yes --cleanup-tag
+          done
+
+      - name: Delete any remaining tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          repo="${{ github.repository }}"
+          for tag in $(gh api "repos/$repo/tags" --paginate -q '.[].name'); do
+            echo "Menghapus tag: $tag"
+            gh api -X DELETE "repos/$repo/git/refs/tags/$tag" || true
+          done
