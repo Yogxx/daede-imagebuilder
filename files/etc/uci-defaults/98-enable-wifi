@@ -1,0 +1,15 @@
+#!/bin/sh
+
+uci set wireless.radio0.disabled='0'
+uci set wireless.radio0.country='ID'
+
+uci set wireless.default_radio0.disabled='0'
+uci set wireless.default_radio0.mode='ap'
+uci set wireless.default_radio0.network='lan'
+uci set wireless.default_radio0.ssid='Raspi4'
+uci set wireless.default_radio0.encryption='psk2'
+uci set wireless.default_radio0.key='1234567899'
+
+uci commit wireless
+
+exit 0
