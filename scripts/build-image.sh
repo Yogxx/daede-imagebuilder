@@ -201,22 +201,12 @@ fi
 	cat > BUILD-MANIFEST.txt <<BODYEOF
 ## daede firmware · ${EXTRA_IMAGE_NAME}
 
-based on OpenWrt 25.12.2，bcm27xx-bcm2711 通用镜像，ext4-only。
-
-### Recommended Download
-
-| 格式 | 适用场景 | 文件 |
-|------|----------|------|
-| **img.gz** | 物理机 dd 写盘 / PVE 导入 | daede-ext4-efi.img.gz |
-| **qcow2** | QEMU / Proxmox VE | daede-ext4-efi.qcow2 |
-| **vmdk** | VMware ESXi / Workstation | daede-ext4-efi.vmdk |
-
-> additional：`daede-rootfs.tar.gz` 裸文件系统，可用于 LXC 容器转换。
+based on OpenWrt 25.12.2
 
 ### Image Details
 
-- **System Type**：squashfs（只读根 + overlay 可写层，抗断电）
-- **Partitioning**：combined（含分区表 + 引导，直接 dd）
+- **System Type**：ext4fs
+- **Partitioning**：combined
 - **start up**：EFI
 - **Root partition size**：${ROOTFS_PARTSIZE} MB
 - **Build Date**：${BUILD_DATE}
