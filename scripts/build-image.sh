@@ -212,10 +212,6 @@ based on OpenWrt 25.12.2
 - **Build Date**：${BUILD_DATE}
 - **ImageBuilder**：${IMAGEBUILDER_URL}
 
-### Pre-installed software
-
-\`$(cat "$OUT_DIR/.extra_packages" 2>/dev/null || echo "$EXTRA_PACKAGES")\`
-
 ### check
 
 \`\`\`bash
