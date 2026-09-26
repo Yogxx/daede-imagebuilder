@@ -1,0 +1,71 @@
+name: Delete old workflow runs & artifacts
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'  # tiap minggu, opsional — hapus kalau gak mau scheduled
+
+permissions:
+  actions: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old workflow runs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const keepMinimumRuns = 5;
+            const retainDays = 7;
+            const cutoff = new Date();
+            cutoff.setDate(cutoff.getDate() - retainDays);
+
+            let allRuns = [];
+            let page = 1;
+            while (true) {
+              const res = await github.rest.actions.listWorkflowRunsForRepo({
+                owner, repo, per_page: 100, page
+              });
+              if (res.data.workflow_runs.length === 0) break;
+              allRuns.push(...res.data.workflow_runs);
+              page++;
+            }
+
+            // urutkan terbaru dulu, biar keep_minimum_runs ngambil yang paling baru
+            allRuns.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            const toDelete = allRuns
+              .slice(keepMinimumRuns)
+              .filter(run => new Date(run.created_at) < cutoff);
+
+            console.log(`Total runs: ${allRuns.length}, akan dihapus: ${toDelete.length}`);
+
+            for (const run of toDelete) {
+              console.log(`Deleting run: ${run.name} (id: ${run.id}, created: ${run.created_at})`);
+              try {
+                await github.rest.actions.deleteWorkflowRun({ owner, repo, run_id: run.id });
+              } catch (e) {
+                console.log(`Failed to delete ${run.id}: ${e.message}`);
+              }
+            }
+
+      - name: Delete all artifacts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            let page = 1;
+            while (true) {
+              const res = await github.rest.actions.listArtifactsForRepo({
+                owner, repo, per_page: 100, page
+              });
+              if (res.data.artifacts.length === 0) break;
+              for (const artifact of res.data.artifacts) {
+                console.log(`Deleting artifact: ${artifact.name} (id: ${artifact.id})`);
+                await github.rest.actions.deleteArtifact({
+                  owner, repo, artifact_id: artifact.id
+                });
+              }
+              page++;
+            }
