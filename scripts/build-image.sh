@@ -199,11 +199,11 @@ fi
 	# Build date in CST for release notes
 	BUILD_DATE="$(TZ='Asia/Jakarta' date '+%F %H:%M CST')"
 	cat > BUILD-MANIFEST.txt <<BODYEOF
-## daede 固件 · ${EXTRA_IMAGE_NAME}
+## daede firmware · ${EXTRA_IMAGE_NAME}
 
-基于 OpenWrt 25.12.2，bcm27xx-bcm2711 通用镜像，ext4-only。
+based on OpenWrt 25.12.2，bcm27xx-bcm2711 通用镜像，ext4-only。
 
-### 推荐下载
+### Recommended Download
 
 | 格式 | 适用场景 | 文件 |
 |------|----------|------|
@@ -211,22 +211,22 @@ fi
 | **qcow2** | QEMU / Proxmox VE | daede-ext4-efi.qcow2 |
 | **vmdk** | VMware ESXi / Workstation | daede-ext4-efi.vmdk |
 
-> 额外：`daede-rootfs.tar.gz` 裸文件系统，可用于 LXC 容器转换。
+> additional：`daede-rootfs.tar.gz` 裸文件系统，可用于 LXC 容器转换。
 
-### 镜像详情
+### Image Details
 
-- **系统类型**：squashfs（只读根 + overlay 可写层，抗断电）
-- **分区**：combined（含分区表 + 引导，直接 dd）
-- **启动**：EFI
-- **根分区大小**：${ROOTFS_PARTSIZE} MB
-- **构建日期**：${BUILD_DATE}
+- **System Type**：squashfs（只读根 + overlay 可写层，抗断电）
+- **Partitioning**：combined（含分区表 + 引导，直接 dd）
+- **start up**：EFI
+- **Root partition size**：${ROOTFS_PARTSIZE} MB
+- **Build Date**：${BUILD_DATE}
 - **ImageBuilder**：${IMAGEBUILDER_URL}
 
-### 预装软件
+### Pre-installed software
 
 \`$(cat "$OUT_DIR/.extra_packages" 2>/dev/null || echo "$EXTRA_PACKAGES")\`
 
-### 校验
+### check
 
 \`\`\`bash
 sha256sum -c sha256sums --ignore-missing
